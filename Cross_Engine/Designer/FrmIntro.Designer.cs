@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmIntro));
             btnNewProject = new Button();
             btnExit = new Button();
             SuspendLayout();
             // 
             // btnNewProject
             // 
-            btnNewProject.Location = new Point(12, 409);
+            btnNewProject.Location = new Point(574, 255);
             btnNewProject.Name = "btnNewProject";
             btnNewProject.Size = new Size(134, 29);
             btnNewProject.TabIndex = 0;
@@ -44,7 +45,7 @@
             // 
             // btnExit
             // 
-            btnExit.Location = new Point(654, 409);
+            btnExit.Location = new Point(574, 528);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(134, 29);
             btnExit.TabIndex = 1;
@@ -57,7 +58,9 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(800, 450);
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(800, 569);
             Controls.Add(btnExit);
             Controls.Add(btnNewProject);
             Name = "FrmIntro";

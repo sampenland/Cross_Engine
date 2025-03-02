@@ -20,7 +20,7 @@ namespace Cross_Engine
         public static FrmEditor ?Editor;
 
         // Colors
-        public static Color C_Background = Color.MediumAquamarine;
+        public static Color C_Background = Color.LightGray;
 
         [STAThread]
         static void Main()

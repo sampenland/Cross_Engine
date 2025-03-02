@@ -1,4 +1,5 @@
 ﻿using Cross_Engine;
+using SFML.System;
 using SFML.Window;
 using System.Reflection.Metadata;
 
@@ -12,10 +13,34 @@ namespace CrossEngine.Engine
         private InputHandler inputHandler;
         private Thread ?updateThread;
         private nint Handle;
+        private bool _paused = false;
+        public bool Paused
+        {
+            get
+            {
+                return _paused;
+            }
+
+            set
+            {
+                _paused = value;
+
+                if (!_paused && FpsTimer != null)
+                {
+                    FpsTimer.Restart();
+                }
+            }
+        }
 
         // Secondary
-        public static float DeltaTime;
-        public static bool IsRunning = false;
+        public float DeltaTime;
+        public float FPS = 0f;
+        float lastTime = DateTime.Now.Ticks;
+        private float LOW_LIMIT = 0.0167f;
+        private float HIGH_LIMIT = 0.1f;
+        private Int64 CountedFrames = 0;
+        private Clock ?FpsTimer;
+        public bool IsRunning = false;
 
         public Game(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey, bool handle = false)
         {
@@ -25,6 +50,7 @@ namespace CrossEngine.Engine
             }
             sceneManager = new SceneManager();
             inputHandler = new InputHandler();
+
         }
 
         public void RebuildWindow(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey, nint handle)
@@ -48,6 +74,8 @@ namespace CrossEngine.Engine
             }
 
             gameWindow.Init(SFML.Graphics.Color.Black);
+            FpsTimer = new Clock();
+            FpsTimer.Restart();
         }
 
         public void Start(Scene startScene)
@@ -116,6 +144,9 @@ namespace CrossEngine.Engine
                 if (!gameWindow.Running) break;
 
                 Application.DoEvents();
+                if (Paused) continue;
+
+                UpdateDeltaTime();
 
                 // Update inputs
                 inputHandler.Update();
@@ -127,6 +158,32 @@ namespace CrossEngine.Engine
             }
 
             End();
+        }
+
+        private void UpdateDeltaTime()
+        {
+            if (FpsTimer != null)
+            {
+                float sec = FpsTimer.ElapsedTime.AsSeconds();
+                float avgFPS = (float)(CountedFrames / (sec));
+                if (avgFPS > 2000000)
+                {
+                    avgFPS = 0;
+                }
+                
+                FPS = avgFPS;
+            }
+
+
+            float currentTime = DateTime.Now.Ticks;
+            float deltaTime = (currentTime - lastTime) / 1000.0f;
+            if (deltaTime < LOW_LIMIT)
+                deltaTime = LOW_LIMIT;
+            else if (deltaTime > HIGH_LIMIT)
+                deltaTime = HIGH_LIMIT;
+
+            lastTime = currentTime;
+            CountedFrames++;
         }
 
         public void RenderGames()

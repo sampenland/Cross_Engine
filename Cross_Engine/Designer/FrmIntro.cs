@@ -5,7 +5,13 @@ namespace Cross_Engine
         public FrmIntro()
         {
             InitializeComponent();
-            Text = "Cross Engine :: " + Application.ProductVersion.ToString();
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+            if (fvi != null)
+            {
+                string ?version = fvi.FileVersion;
+                Text = "Cross Engine :: " + version;
+            }
         }
 
         private void btnNewProject_Click(object sender, EventArgs e)

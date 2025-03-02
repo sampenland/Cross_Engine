@@ -267,6 +267,9 @@ namespace CrossEngine.Engine
                 {
                     mainWindow.Draw(text);
                 }
+
+                mainWindow.Draw(scene.GetConsole().GetFPSBackground());
+                mainWindow.Draw(scene.GetConsole().GetFPS());
             }
         }
 

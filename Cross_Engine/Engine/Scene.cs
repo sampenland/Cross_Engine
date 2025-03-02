@@ -30,7 +30,7 @@ namespace CrossEngine.Engine
                 DrawPriorityLayers.Add(new List<Sprite>());
             }
 
-            inGameConsole = new ConsoleDisplay(name + "_console", 0, 0, 100, 100);
+            inGameConsole = new ConsoleDisplay(game, name + "_console", 0, 0, 100, 100);
             LinkConsole(inGameConsole);
         }
 

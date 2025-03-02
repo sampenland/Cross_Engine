@@ -6,6 +6,7 @@ namespace CrossEngine.Engine
     public class ConsoleDisplay
     {
         InputHandler ?inputHandler;
+        Game ?game;
         public bool visible = false;
         private string Name;
 
@@ -13,6 +14,11 @@ namespace CrossEngine.Engine
         private RectangleShape background;
         private SFML.Graphics.Font defaultFont;
         private int fontSize = 16;
+        private SFML.Graphics.Color TextColor;
+        private SFML.Graphics.Color BackgroundColor;
+
+        private Text ?FPS;
+        private RectangleShape ?FPSBackground;
 
         private int X;
         private int Y;
@@ -20,9 +26,15 @@ namespace CrossEngine.Engine
         private int Height;
         private int Spacing = 20;
 
-        public ConsoleDisplay(string name, int x, int y, int width, int height)
+        public ConsoleDisplay(Game game, string name, int x, int y, int width, int height)
         {
+            BackgroundColor = new SFML.Graphics.Color(100, 100, 100);
+            TextColor = new SFML.Graphics.Color(255, 255, 255);
+
+            this.game = game;
             Name = name;
+            X = x;
+            Y = y;
 
             // Load default font if found
             try
@@ -35,11 +47,15 @@ namespace CrossEngine.Engine
                 throw new Exception();
             }
 
+            FPS = new Text("", defaultFont);
+            FPS.Position = new SFML.System.Vector2f(10, 2);
+            FPS.CharacterSize = (uint)fontSize;
+            FPS.FillColor = TextColor;
+            FPS.Style = Text.Styles.Bold;
 
             Texts = new List<Text>();
             background = new RectangleShape(new SFML.System.Vector2f(Width, Height));
-            background.FillColor = SFML.Graphics.Color.Green;
-            background.Position = new SFML.System.Vector2f(X, Y);
+            background.FillColor = BackgroundColor;
 
             Configure(x, y, width, height);
         }
@@ -55,8 +71,13 @@ namespace CrossEngine.Engine
             Y = y;
             Width = width;
             Height = height;
+            
             background.Size = new SFML.System.Vector2f(width, height);
             background.Position = new SFML.System.Vector2f(X, Y);
+
+            FPSBackground = new RectangleShape(new SFML.System.Vector2f(Width, 26));
+            FPSBackground.FillColor = BackgroundColor;
+            FPSBackground.Position = new SFML.System.Vector2f(0, 0);
         }
 
         public void Print(string text)
@@ -68,7 +89,7 @@ namespace CrossEngine.Engine
 
             Text newText = new Text(" " + text, defaultFont);
             newText.CharacterSize = (uint)fontSize;
-            newText.FillColor = SFML.Graphics.Color.Black;
+            newText.FillColor = TextColor;
             newText.Style = Text.Styles.Bold;
             Texts.Add(newText);
         }
@@ -113,6 +134,20 @@ namespace CrossEngine.Engine
         public RectangleShape GetBackground()
         {
             return background;
+        }
+
+        public Text GetFPS()
+        {
+            if (FPS == null) throw new Exception("FPS error");
+            if (game == null) return new Text();
+            FPS.DisplayedString = "FPS " + game.FPS.ToString("##.#");
+            return FPS;
+        }
+
+        public RectangleShape GetFPSBackground()
+        {
+            if (FPSBackground == null) return new RectangleShape();
+            return FPSBackground;
         }
     }
 }
