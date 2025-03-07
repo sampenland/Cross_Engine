@@ -8,7 +8,6 @@ namespace CrossEngine.Engine
 {
     class Log
     {
-
         public static void PrintDirLocation()
         {
             Print("Location: " + Directory.GetCurrentDirectory());
@@ -37,6 +36,11 @@ namespace CrossEngine.Engine
         public static void Error(string errText)
         {
             Console.WriteLine(errText);
+        }
+
+        public static void ThrowException(string text)
+        {
+            throw new Exception(text);
         }
     }
 }

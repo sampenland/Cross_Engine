@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cross_Engine;
+using NLua;
 
 namespace CrossEngine.Engine
 {
     public class Scene
     {
+        public string LUA_DIR = "";
         const int DRAW_LAYERS = 10;
 
         public string Name;
@@ -21,8 +19,8 @@ namespace CrossEngine.Engine
 
         public Scene(Game game, string name)
         {
-            this.game = game;
             Name = name;
+            this.game = game;
 
             DrawPriorityLayers = new List<List<Sprite>>();
             for(int i = 0; i < DRAW_LAYERS; i++)
@@ -32,6 +30,66 @@ namespace CrossEngine.Engine
 
             inGameConsole = new ConsoleDisplay(game, name + "_console", 0, 0, 100, 100);
             LinkConsole(inGameConsole);
+            if (game.usingLua) CreateLuaFiles();
+        }
+
+        public void LoadLua()
+        {
+            try
+            {
+                if (File.Exists(LUA_DIR + "create.lua"))
+                {
+                    game.luaCode.Append(Environment.NewLine + "function scene_" + Name + "Create()" + Environment.NewLine);
+                    game.luaCode.Append(File.ReadAllText(LUA_DIR + "create.lua") + Environment.NewLine);
+                    game.luaCode.Append(Environment.NewLine + "end" + Environment.NewLine);
+                }
+
+                if (File.Exists(LUA_DIR + "update.lua"))
+                {
+                    game.luaCode.Append(Environment.NewLine + "function scene_" + Name + "Update(dt)" + Environment.NewLine);
+                    game.luaCode.Append(File.ReadAllText(LUA_DIR + "update.lua") + Environment.NewLine);
+                    game.luaCode.Append(Environment.NewLine + "end" + Environment.NewLine);
+                }
+            }         
+            catch(Exception)
+            {
+                Log.Print("Failed to load lua files: " + Name);
+            }
+        }
+
+        private void CreateLuaFiles()
+        {
+            LUA_DIR = game.LUA_ROOT + "scenes\\" + Name + "\\";
+            if (!Directory.Exists(LUA_DIR))
+            {
+                Directory.CreateDirectory(LUA_DIR);
+            }
+
+            foreach(string luaFile in Program.LuaSceneFiles)
+            {
+                if(!File.Exists(LUA_DIR + luaFile)) File.Create(LUA_DIR + luaFile);
+            }
+        }
+
+        private void DeleteLuaFiles()
+        {
+            try
+            {
+                DirectoryInfo dir = new DirectoryInfo(LUA_DIR);
+                if (dir.Exists)
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch (IOException)
+            {
+                Log.ThrowException("Clean of " + Name + " scene lua files failed.");
+            }
+        }
+
+        public void DeleteScene()
+        {
+            DeleteLuaFiles();
         }
 
         public void LinkConsole(ConsoleDisplay console)
@@ -104,6 +162,15 @@ namespace CrossEngine.Engine
             DrawPriorityLayers[layerFnd].Remove(sprite);
         }
 
+        // ============================================================================================
+        // Functions with LUA CALLS
+        // ============================================================================================
+        public void Start()
+        {
+            var startFunc = game.luaState["scene_" + Name + "Create"] as LuaFunction;
+            if (startFunc != null) startFunc.Call();
+        }
+
         public void Update()
         {
             if (DrawPriorityLayers == null) throw new NullReferenceException();
@@ -131,6 +198,12 @@ namespace CrossEngine.Engine
                         }
                     }
                 }
+            }
+
+            if (game.usingLua)
+            {
+                var updateFunc = game.luaState["scene_" + Name + "Update"] as LuaFunction;
+                if (updateFunc != null) updateFunc.Call(game.DeltaTime);
             }
         }
     }

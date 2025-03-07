@@ -1,7 +1,9 @@
 ﻿using Cross_Engine;
+using NLua;
 using SFML.System;
 using SFML.Window;
 using System.Reflection.Metadata;
+using System.Text;
 
 namespace CrossEngine.Engine
 {
@@ -14,6 +16,11 @@ namespace CrossEngine.Engine
         private Thread ?updateThread;
         private nint Handle;
         private bool _paused = false;
+        public Lua luaState = new Lua();
+        public StringBuilder luaCode = new StringBuilder();
+        public string LUA_ROOT = "";
+        public bool usingLua;
+
         public bool Paused
         {
             get
@@ -27,7 +34,9 @@ namespace CrossEngine.Engine
 
                 if (!_paused && FpsTimer != null)
                 {
+                    FpsTimer = new Clock();
                     FpsTimer.Restart();
+                    CountedFrames = 0;
                 }
             }
         }
@@ -42,15 +51,23 @@ namespace CrossEngine.Engine
         private Clock ?FpsTimer;
         public bool IsRunning = false;
 
-        public Game(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey, bool handle = false)
+        public Game(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey, bool handle = false, bool usingLua = true)
         {
             if (!handle)
             {
                 gameWindow = new Window(this, windowWidth, windowHeight, gameName, endKey, handle);
             }
-            sceneManager = new SceneManager();
+            sceneManager = new SceneManager(this);
             inputHandler = new InputHandler();
+            this.usingLua = usingLua;
 
+            if (this.usingLua)
+            {
+                LUA_ROOT = Directory.GetCurrentDirectory() + "\\Lua\\" + Program.ProjectName + "\\";
+
+                if (!Directory.Exists(LUA_ROOT)) Directory.CreateDirectory(LUA_ROOT);
+                if (!File.Exists(LUA_ROOT + "gameStart.lua")) File.Create("gameStart.lua");
+            }
         }
 
         public void RebuildWindow(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey, nint handle)
@@ -76,6 +93,60 @@ namespace CrossEngine.Engine
             gameWindow.Init(SFML.Graphics.Color.Black);
             FpsTimer = new Clock();
             FpsTimer.Restart();
+
+            if(usingLua) InitLua();
+        }
+
+        private void InitLua()
+        {
+            luaCode = new StringBuilder();
+            luaState = new Lua();
+            luaState.LoadCLRPackage();
+
+            luaState["c_game"] = this;
+            luaState["c_window"] = gameWindow;
+
+            if (File.Exists(Environment.CurrentDirectory + "\\Lua\\" + "Lib.lua"))
+            {
+                string lib = File.ReadAllText(Environment.CurrentDirectory + "\\Lua\\" + "Lib.lua");
+                luaCode.Append(lib + Environment.NewLine);
+            }
+            else
+            {
+                Log.ThrowException("Could not load/find lua library.");
+                return;
+            }
+
+            if (File.Exists(LUA_ROOT + "gameStart.lua"))
+            {
+                luaCode.Append(Environment.NewLine + "function gameStart()" + Environment.NewLine);
+                luaCode.Append(File.ReadAllText(LUA_ROOT + "gameStart.lua") + Environment.NewLine);
+                luaCode.Append(Environment.NewLine + "end" + Environment.NewLine);
+            }
+
+            // Init scene lua
+            foreach(Scene scene in sceneManager.GetScenes())
+            {
+                scene.LoadLua();
+            }
+
+            foreach(Scene scene in sceneManager.GetPassiveScenes())
+            {
+                scene.LoadLua();
+            }
+
+            // Create lua state
+            try
+            {
+                File.WriteAllText(LUA_ROOT + "game.lua", luaCode.ToString());
+                luaState.DoString(luaCode.ToString());
+                //luaState.LoadFile(LUA_ROOT + "game.lua");
+            }
+            catch(Exception ex)
+            {
+                Log.ThrowException(ex.ToString());
+                return;
+            }
         }
 
         public void Start(Scene startScene)

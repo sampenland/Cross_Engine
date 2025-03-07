@@ -1,3 +1,6 @@
+using Cross_Engine.Engine;
+using Microsoft.VisualBasic;
+
 namespace Cross_Engine
 {
     public partial class FrmIntro : Form
@@ -18,6 +21,13 @@ namespace Cross_Engine
         {
             if (Program.Editor != null)
             {
+                Program.ProjectName = Interaction.InputBox("Please enter your project name.", "New Project");
+                if (Program.ProjectName == null || Program.ProjectName == "")
+                {
+                    MessageBox.Show("Name empty or null.");
+                    return;
+                }
+                Program.ProjectName = Common.RemoveSpecialCharacters(Program.ProjectName);
                 Program.Editor.Show();
                 Program.Editor.Start();
             }

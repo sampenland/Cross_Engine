@@ -34,6 +34,9 @@
             ndGameHeight = new NumericUpDown();
             ndGameWidth = new NumericUpDown();
             label2 = new Label();
+            btnSceneSource = new Button();
+            btnAddScene = new Button();
+            btnRemoveScene = new Button();
             ((System.ComponentModel.ISupportInitialize)ndGameHeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ndGameWidth).BeginInit();
             SuspendLayout();
@@ -50,7 +53,7 @@
             // lstScenes
             // 
             lstScenes.FormattingEnabled = true;
-            lstScenes.Location = new Point(12, 32);
+            lstScenes.Location = new Point(12, 102);
             lstScenes.Name = "lstScenes";
             lstScenes.Size = new Size(150, 224);
             lstScenes.TabIndex = 1;
@@ -94,11 +97,44 @@
             label2.TabIndex = 5;
             label2.Text = "x";
             // 
+            // btnSceneSource
+            // 
+            btnSceneSource.Location = new Point(12, 67);
+            btnSceneSource.Name = "btnSceneSource";
+            btnSceneSource.Size = new Size(150, 29);
+            btnSceneSource.TabIndex = 6;
+            btnSceneSource.Text = "Edit Scene Source";
+            btnSceneSource.UseVisualStyleBackColor = true;
+            btnSceneSource.Click += btnSceneSource_Click;
+            // 
+            // btnAddScene
+            // 
+            btnAddScene.Location = new Point(12, 32);
+            btnAddScene.Name = "btnAddScene";
+            btnAddScene.Size = new Size(150, 29);
+            btnAddScene.TabIndex = 7;
+            btnAddScene.Text = "Add Scene";
+            btnAddScene.UseVisualStyleBackColor = true;
+            btnAddScene.Click += btnAddScene_Click;
+            // 
+            // btnRemoveScene
+            // 
+            btnRemoveScene.Location = new Point(12, 332);
+            btnRemoveScene.Name = "btnRemoveScene";
+            btnRemoveScene.Size = new Size(150, 29);
+            btnRemoveScene.TabIndex = 8;
+            btnRemoveScene.Text = "Remove Scene";
+            btnRemoveScene.UseVisualStyleBackColor = true;
+            btnRemoveScene.Click += btnRemoveScene_Click;
+            // 
             // FrmEditor
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1322, 719);
+            Controls.Add(btnRemoveScene);
+            Controls.Add(btnAddScene);
+            Controls.Add(btnSceneSource);
             Controls.Add(label2);
             Controls.Add(ndGameWidth);
             Controls.Add(ndGameHeight);
@@ -122,5 +158,8 @@
         private NumericUpDown ndGameHeight;
         private NumericUpDown ndGameWidth;
         private Label label2;
+        private Button btnSceneSource;
+        private Button btnAddScene;
+        private Button btnRemoveScene;
     }
 }

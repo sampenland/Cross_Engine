@@ -26,7 +26,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SFML.Net" Version="2.6.0" />
+    <PackageReference Include="NLua" Version="1.7.4" />
+    <PackageReference Include="Scintilla5.NET" Version="5.6.6" />
+    <PackageReference Include="SFML.Net" Version="2.6.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +46,12 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <ItemGroup>
+    <Folder Include="Engine\Included\Lua\" />
+    <Folder Include="Engine\Included\Help\" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="xcopy /y /e $(ProjectDir)\Engine\Included\*  $(ProjectDir)$(OutDir)" />
   </Target>
 

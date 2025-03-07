@@ -53,6 +53,7 @@ namespace CrossEngine.Engine
                     surface.KeyPress += WindowKeyPress;
                     surface.KeyUp += WindowKeyReleased;
                     surface.Click += SurfaceClick;
+                    surface.LostFocus += WindowLostFocus;
                     
                     parentForm = surface.Parent as Form;
                     if (parentForm != null)
@@ -65,15 +66,25 @@ namespace CrossEngine.Engine
             }
             catch(Exception ex)
             {
-                throw new Exception("Could not link input handler." + ex.ToString());
+                Log.ThrowException("Could not link input handler." + ex.ToString());
+                return;
             }
+        }
+
+        private void WindowLostFocus(object? sender, EventArgs e)
+        {
+            if (game == null || game.GetInputHandler() == null) return;
+            //if (sender != null) ((Control)sender).Focus();
+            game.GetInputHandler().Enabled = false;
+            game.Paused = true;
         }
 
         private void FormClick(object? sender, EventArgs e)
         {
             if (game == null || game.GetInputHandler() == null) return;
-            if (parentForm != null) parentForm.Focus();
+            //if (parentForm != null) parentForm.Focus();
             game.GetInputHandler().Enabled = false;
+            game.Paused = true;
         }
 
         private void SurfaceClick(object? sender, EventArgs e)
@@ -81,6 +92,7 @@ namespace CrossEngine.Engine
             if (game == null || game.GetInputHandler() == null) return;
             if (surface != null) surface.Focus();
             game.GetInputHandler().Enabled = true;
+            game.Paused = false;
         }
 
         private void WindowKeyReleased(object? sender, System.Windows.Forms.KeyEventArgs e)

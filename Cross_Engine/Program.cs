@@ -11,6 +11,10 @@ namespace Cross_Engine
         public static Form ?CrossForm;
         public static DrawingSurface ?CrossSurface;
         public static Game? WorldMaker;
+        public static string ProjectName = "";
+
+        // Lua 
+        public static string[] LuaSceneFiles = ["create.lua", "update.lua"];
 
         // ------------------------------
 
@@ -60,6 +64,8 @@ namespace Cross_Engine
                 form.BackColor = C_Background;
                 form.StartPosition = FormStartPosition.CenterScreen;
             }
+
+            ProjectName = "";
         }
     }
 }

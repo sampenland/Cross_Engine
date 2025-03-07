@@ -1,0 +1,17 @@
+c_game = Game instance
+c_window = Game's window instance
+
+===========================================
+functions
+---------------
+-- Happens when scene starts (even on changing scenes)
+function [sceneName]Create()
+	customCode
+end
+
+-- Happens once a frame inside the scene
+function [sceneName]Update(deltaTime)
+	customCode
+end
+
+===========================================

@@ -1,10 +1,12 @@
-﻿using CrossEngine.Engine;
+﻿using Cross_Engine.Engine;
+using CrossEngine.Engine;
+using Microsoft.VisualBasic;
 
 namespace Cross_Engine.Designer
 {
     public partial class FrmEditor : Form
     {
-        public DrawingSurface ?worldEditorSurface;
+        public DrawingSurface? worldEditorSurface;
 
         public FrmEditor()
         {
@@ -20,16 +22,7 @@ namespace Cross_Engine.Designer
 
             if (loadFile == "none")
             {
-                Scene mainScene = new Scene(Program.CrossGame, "Main");
-
-                ConsoleDisplay crossDisplay = new ConsoleDisplay(Program.CrossGame, "CrossGameCon", 0, (int)ndGameHeight.Value - 300, (int)ndGameWidth.Value, 300);
-                crossDisplay.LinkInputHandler(Program.CrossGame.GetInputHandler());
-                crossDisplay.visible = true;
-                crossDisplay.Print("Default Main Scene Started");
-                mainScene.LinkConsole(crossDisplay);
-
-                Program.CrossGame.AddScene(mainScene);
-                
+                AddScene("Main");
             }
             else
             {
@@ -42,7 +35,7 @@ namespace Cross_Engine.Designer
         private void InitWorldEditor()
         {
             Size worldMakerSize = new Size(900, 500);
-            Program.WorldMaker = new Game((uint)worldMakerSize.Width, (uint)worldMakerSize.Height, "", SFML.Window.Keyboard.Key.Backspace, true);
+            Program.WorldMaker = new Game((uint)worldMakerSize.Width, (uint)worldMakerSize.Height, "", SFML.Window.Keyboard.Key.Backspace, true, false);
             worldEditorSurface = new DrawingSurface();
             worldEditorSurface.Location = new Point(170, 50);
             worldEditorSurface.Size = worldMakerSize;
@@ -54,10 +47,13 @@ namespace Cross_Engine.Designer
             worldMakerConsole.LinkInputHandler(Program.WorldMaker.GetInputHandler());
             worldMakerConsole.visible = true;
             worldMakerScene.LinkConsole(worldMakerConsole);
-            worldMakerConsole.Print("World Editor Started");
+            worldMakerConsole.Print("World Editor Started. Click to enable.");
 
             Program.WorldMaker.AddPassiveScene(worldMakerScene);
             Program.WorldMaker.Start();
+            Program.WorldMaker.RenderGames();
+            Program.WorldMaker.FPS = 60;
+            Program.WorldMaker.Paused = true;
         }
 
         private void LoadProject(string loadFile)
@@ -130,8 +126,109 @@ namespace Cross_Engine.Designer
                     Program.CrossForm.Dispose();
                 }
             }
+
+            Focus();
+        }
+
+        private void btnSceneSource_Click(object sender, EventArgs e)
+        {
+            if (lstScenes.SelectedIndex == -1)
+            {
+                MessageBox.Show("Select a scene from list.");
+                return;
+            }
+            else
+            {
+                string? sceneName = lstScenes.Items[lstScenes.SelectedIndex].ToString();
+                if (sceneName != null && Program.CrossGame != null)
+                {
+                    CreateSourceEditorForScene(Program.CrossGame.GetScene(sceneName));
+                }
+            }
+        }
+
+        private void CreateSourceEditorForScene(Scene scene)
+        {
+            FrmSourceEditor codeEditor = new FrmSourceEditor();
+            codeEditor.Show();
+            codeEditor.LoadScene(scene);
+        }
+
+        private void AddScene(string name)
+        {
+            if (Program.CrossGame == null)
+            {
+                Log.ThrowException("Cross game null");
+                return;
+            }
+
+            name = Common.RemoveSpecialCharacters(name);
+            if (name != null && name != "")
+            {
+                Scene scene = new Scene(Program.CrossGame, name);
+
+                ConsoleDisplay crossDisplay = new ConsoleDisplay(Program.CrossGame, "CrossGameCon_" + name, 0, (int)ndGameHeight.Value - 300, (int)ndGameWidth.Value, 300);
+                crossDisplay.LinkInputHandler(Program.CrossGame.GetInputHandler());
+                crossDisplay.visible = true;
+                crossDisplay.Print(name + " started");
+                scene.LinkConsole(crossDisplay);
+
+                Program.CrossGame.AddScene(scene);
+                DisplayUIChanges();
+            }
+        }
+
+        private void btnAddScene_Click(object sender, EventArgs e)
+        {
+            if (Program.CrossGame == null)
+            {
+                Log.ThrowException("Cross game null");
+                return;
+            }
+
+            string sceneName = Interaction.InputBox("Enter scene name.", "Scene Name");
+            if (sceneName != null && sceneName != "")
+            {
+                sceneName = Common.RemoveSpecialCharacters(sceneName);
+
+                bool found = false;
+                foreach (Scene scene in Program.CrossGame.GetScenes())
+                {
+                    if (sceneName == scene.Name) found = true;
+                }
+
+                if (found)
+                {
+                    MessageBox.Show("Scene name already exists.");
+                    return;
+                }
+
+                AddScene(sceneName);
+            }
+        }
+
+        private void btnRemoveScene_Click(object sender, EventArgs e)
+        {
+            if (lstScenes.SelectedIndex == -1)
+            {
+                MessageBox.Show("Select a scene from list.");
+                return;
+            }
+            else
+            {
+                string ?sceneName = lstScenes.Items[lstScenes.SelectedIndex].ToString();
+                if (sceneName != null && sceneName != "" && Program.CrossGame != null)
+                {
+                    if(MessageBox.Show("Are you sure you wish to delete: " + sceneName + "?", "Delete Scene?", MessageBoxButtons.YesNo) == DialogResult.No) return;
+                    Program.CrossGame.RemoveScene(Program.CrossGame.GetScene(sceneName));
+                    DisplayUIChanges();
+                }
+            }
         }
     }
+
+
+
     public class DrawingSurface : System.Windows.Forms.Control
     {
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
