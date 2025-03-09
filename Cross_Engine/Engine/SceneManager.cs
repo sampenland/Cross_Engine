@@ -22,7 +22,9 @@
             }
 
             CurrentScene = scene;
-            game.luaState["c_console"] = CurrentScene.GetConsole();
+
+            if (game.usingLua) game.luaState["c_console"] = CurrentScene.GetConsole();
+            
             CurrentScene.Start();
             Log.Print("Started scene: " + scene.Name);
         }

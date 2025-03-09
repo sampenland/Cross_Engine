@@ -167,8 +167,11 @@ namespace CrossEngine.Engine
         // ============================================================================================
         public void Start()
         {
-            var startFunc = game.luaState["scene_" + Name + "Create"] as LuaFunction;
-            if (startFunc != null) startFunc.Call();
+            if (game.usingLua)
+            {
+                var startFunc = game.luaState["scene_" + Name + "Create"] as LuaFunction;
+                if (startFunc != null) startFunc.Call();
+            }
         }
 
         public void Update()

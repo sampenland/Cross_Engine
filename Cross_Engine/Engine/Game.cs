@@ -140,7 +140,6 @@ namespace CrossEngine.Engine
             {
                 File.WriteAllText(LUA_ROOT + "game.lua", luaCode.ToString());
                 luaState.DoString(luaCode.ToString());
-                //luaState.LoadFile(LUA_ROOT + "game.lua");
             }
             catch(Exception ex)
             {
@@ -295,13 +294,34 @@ namespace CrossEngine.Engine
                                     gameWindow.Render();
                                 });
                             }
-                            catch(Exception ex)
+                            catch(Exception)
                             {
                                 // Ignore
                             }
                         }
                     }
-                }              
+                }
+
+                if (Program.SandboxGame != null && Program.SandboxGame.Handle == Handle)
+                {
+                    if (Program.SandboxForm != null && Program.SandboxForm.Visible && Program.SandboxSurface != null && IsRunning)
+                    {
+                        if (!Program.SandboxSurface.IsDisposed)
+                        {
+                            try
+                            {
+                                Program.SandboxSurface.Invoke((MethodInvoker)delegate
+                                {
+                                    gameWindow.Render();
+                                });
+                            }
+                            catch (Exception)
+                            {
+                                // Ignore
+                            }
+                        }
+                    }
+                }
             }
         }
 

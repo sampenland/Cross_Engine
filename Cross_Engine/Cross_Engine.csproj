@@ -15,14 +15,21 @@
     <Copyright>2025 (C)</Copyright>
     <PackageProjectUrl>briarlakegames.com</PackageProjectUrl>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <Configurations>Debug;Release;Sandbox</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <IsPublishable>False</IsPublishable>
+    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <IsPublishable>False</IsPublishable>
+    <DefineConstants>$(DefineConstants);DEPLOYGAME</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Sandbox|AnyCPU'">
+    <DefineConstants>$(DefineConstants);SANDBOX</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

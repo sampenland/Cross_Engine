@@ -1,6 +1,5 @@
 using Cross_Engine.Designer;
 using CrossEngine.Engine;
-using CrossEngine.Engine.WorldMaker;
 
 namespace Cross_Engine
 {
@@ -10,6 +9,11 @@ namespace Cross_Engine
         public static Game ?CrossGame;
         public static Form ?CrossForm;
         public static DrawingSurface ?CrossSurface;
+
+        public static Game? SandboxGame;
+        public static Form? SandboxForm;
+        public static DrawingSurface? SandboxSurface;
+
         public static Game? WorldMaker;
         public static string ProjectName = "";
 
@@ -27,13 +31,43 @@ namespace Cross_Engine
         public static Color C_Background = Color.LightGray;
 
         [STAThread]
+
         static void Main()
         {
             ApplicationConfiguration.Initialize();
 
+#if SANDBOX
+            RunSandbox();
+#else
+
             InitWindows();
 
             if (Intro != null) Application.Run(Intro);
+
+#endif
+        }
+
+        static void RunSandbox()
+        {
+
+            SandboxGame = new Game(1280, 720, "Sandbox", SFML.Window.Keyboard.Key.Escape, true, false);
+            SandboxForm = new Form();
+            SandboxForm.Text = "Cross Engine :: Game";
+            SandboxForm.StartPosition = FormStartPosition.CenterScreen;
+            SandboxForm.Width = 1280;
+            SandboxForm.Height = 720;
+            SandboxForm.Show();
+            SandboxSurface = new DrawingSurface();
+            SandboxSurface.Location = new Point(0, 0);
+            SandboxSurface.Size = new Size(SandboxForm.Width, SandboxForm.Height);
+            SandboxForm.Controls.Add(SandboxSurface);
+            SandboxGame.RebuildWindow(1280, 720, "Sandbox", SFML.Window.Keyboard.Key.Escape, SandboxSurface.Handle);
+
+            Scene main = new Scene(SandboxGame, "Main");
+            SandboxGame.AddScene(main);
+            SandboxGame.Start(main);
+
+            Application.Run(SandboxForm);
         }
 
         public static void Reset()
