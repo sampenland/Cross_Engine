@@ -8,6 +8,7 @@ namespace Cross_Engine.Engine
 {
     public class Common
     {
+        public static SFML.Graphics.Font? defaultFont;
         public static string RemoveSpecialCharacters(string str)
         {
             StringBuilder sb = new StringBuilder();

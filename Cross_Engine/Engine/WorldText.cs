@@ -1,6 +1,7 @@
 ﻿using Cross_Engine.Engine.Interfaces;
 using CrossEngine.Engine;
 using SFML.Graphics;
+using System.Security.Policy;
 
 namespace Cross_Engine.Engine
 {
@@ -20,6 +21,11 @@ namespace Cross_Engine.Engine
             if (game == null || game.gameWindow == null) throw new NullReferenceException();
             game.gameWindow.SetView(theView);
             views.Add(theView, game.gameWindow.WorldToPixel(pos.X, pos.Y));
+        }
+        public Text GetDrawable()
+        {
+            if (textObject == null) throw new NullReferenceException();
+            return textObject;
         }
 
         public override void Update()

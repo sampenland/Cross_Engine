@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using Cross_Engine.Engine;
+using SFML.Graphics;
 using SFML.Window;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,22 @@ using System.Threading.Tasks;
 
 namespace CrossEngine.Engine
 {
-    public class Sprite
+    public class Sprite : GameObject
     {
-        private Game game;
         private Texture ?texture;
         private SFML.Graphics.Sprite ?sprite;
-        private Dictionary<View, XYf> views;
         public string ?Name;
-        private float _x;
-        private float _y;
 
         public float X
         {
             get
             {
-                return _x;
+                return pos.X;
             }
 
             set
             {
-                _x = value;
+                pos.X = value;
             }
         }
 
@@ -35,20 +32,19 @@ namespace CrossEngine.Engine
         {
             get
             {
-                return _y;
+                return pos.Y;
             }
 
             set
             {
-                _y = value;
+                pos.Y = value;
             }
         }
 
-        public Sprite(Game game, string textureAsset, int texWidth, int texHeight)
+        public Sprite(Game game, string textureAsset, int texWidth, int texHeight) : base(game)
         {
             try
             {
-                this.game = game;
                 texture = new Texture(textureAsset, new IntRect(0, 0, texWidth, texHeight));
                 sprite = new SFML.Graphics.Sprite(texture);
                 views = new Dictionary<View, XYf>();

@@ -33,6 +33,12 @@ namespace CrossEngine.Engine
             if (game.usingLua) CreateLuaFiles();
         }
 
+        public void AddView(View view)
+        {
+            if (views == null) views = new List<View>();
+            if (!views.Contains(view)) views.Add(view);
+        }
+
         public void LoadLua()
         {
             try
@@ -165,7 +171,7 @@ namespace CrossEngine.Engine
         // ============================================================================================
         // Functions with LUA CALLS
         // ============================================================================================
-        public void Start()
+        public virtual void Start()
         {
             if (game.usingLua)
             {

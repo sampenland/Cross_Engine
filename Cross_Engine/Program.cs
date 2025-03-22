@@ -1,4 +1,5 @@
 using Cross_Engine.Designer;
+using Cross_Engine.Examples;
 using CrossEngine.Engine;
 
 namespace Cross_Engine
@@ -50,7 +51,7 @@ namespace Cross_Engine
         static void RunSandbox()
         {
 
-            SandboxGame = new Game(1280, 720, "Sandbox", SFML.Window.Keyboard.Key.Escape, true, false);
+            SandboxGame = new Game(1280, 720, "Sandbox", SFML.Window.Keyboard.Key.Escape, true, true);
             SandboxForm = new Form();
             SandboxForm.Text = "Cross Engine :: Game";
             SandboxForm.StartPosition = FormStartPosition.CenterScreen;
@@ -63,9 +64,8 @@ namespace Cross_Engine
             SandboxForm.Controls.Add(SandboxSurface);
             SandboxGame.RebuildWindow(1280, 720, "Sandbox", SFML.Window.Keyboard.Key.Escape, SandboxSurface.Handle);
 
-            Scene main = new Scene(SandboxGame, "Main");
-            SandboxGame.AddScene(main);
-            SandboxGame.Start(main);
+            DrawableExamples drawableExamples = new DrawableExamples(SandboxGame, "DrawablesExample");
+            SandboxGame.Start(drawableExamples);
 
             Application.Run(SandboxForm);
         }

@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using Cross_Engine.Engine;
+using SFML.Graphics;
 using Font = SFML.Graphics.Font;
 
 namespace CrossEngine.Engine
@@ -12,7 +13,6 @@ namespace CrossEngine.Engine
 
         private List<Text> Texts;
         private RectangleShape background;
-        private SFML.Graphics.Font defaultFont;
         private int fontSize = 16;
         private SFML.Graphics.Color TextColor;
         private SFML.Graphics.Color BackgroundColor;
@@ -36,18 +36,7 @@ namespace CrossEngine.Engine
             X = x;
             Y = y;
 
-            // Load default font if found
-            try
-            {
-                defaultFont = new Font("Assets/fonts/default.ttf");
-            }
-            catch(Exception ex)
-            {
-                Log.Error("Default font could not be loaded. Make sure bin has Assets/fonts/default.ttf in it. These files are found in Engine folder.");
-                throw new Exception();
-            }
-
-            FPS = new Text("", defaultFont);
+            FPS = new Text("", Common.defaultFont);
             FPS.Position = new SFML.System.Vector2f(10, 2);
             FPS.CharacterSize = (uint)fontSize;
             FPS.FillColor = TextColor;
@@ -87,7 +76,7 @@ namespace CrossEngine.Engine
                 Texts.RemoveAt(0);
             }
 
-            Text newText = new Text(" " + text, defaultFont);
+            Text newText = new Text(" " + text, Common.defaultFont);
             newText.CharacterSize = (uint)fontSize;
             newText.FillColor = TextColor;
             newText.Style = Text.Styles.Bold;

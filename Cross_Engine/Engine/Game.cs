@@ -1,4 +1,5 @@
 ﻿using Cross_Engine;
+using Cross_Engine.Engine;
 using NLua;
 using SFML.System;
 using SFML.Window;
@@ -67,6 +68,22 @@ namespace CrossEngine.Engine
 
                 if (!Directory.Exists(LUA_ROOT)) Directory.CreateDirectory(LUA_ROOT);
                 if (!File.Exists(LUA_ROOT + "gameStart.lua")) File.Create("gameStart.lua");
+            }
+
+            LoadResources();
+        }
+
+        void LoadResources()
+        {
+            // Load default font if found
+            try
+            {
+                Common.defaultFont = new SFML.Graphics.Font("Assets/fonts/default.ttf");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Default font could not be loaded. Make sure bin has Assets/fonts/default.ttf in it. These files are found in Engine folder.");
+                throw new Exception();
             }
         }
 
@@ -138,7 +155,6 @@ namespace CrossEngine.Engine
             // Create lua state
             try
             {
-                File.WriteAllText(LUA_ROOT + "game.lua", luaCode.ToString());
                 luaState.DoString(luaCode.ToString());
             }
             catch(Exception ex)
