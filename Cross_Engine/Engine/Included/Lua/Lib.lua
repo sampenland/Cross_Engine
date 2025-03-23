@@ -9,3 +9,9 @@ function log(text)
 	c_console:Print(text)
 
 end
+
+function worldtext(x, y, text, size, r, g, b)
+
+	c_console:Print("Created world text.")
+
+end

@@ -1,4 +1,5 @@
 ﻿using Cross_Engine;
+using Cross_Engine.Engine;
 using NLua;
 
 namespace CrossEngine.Engine
@@ -12,7 +13,7 @@ namespace CrossEngine.Engine
         public Game game;
 
         protected List<Sprite> ?sprites;
-        protected List<List<Sprite>> ?DrawPriorityLayers;
+        protected List<List<GameObject>> ?DrawPriorityLayers;
         private TileMap ?tilemap;
         protected List<View>? views;
         private ConsoleDisplay inGameConsole;
@@ -22,10 +23,10 @@ namespace CrossEngine.Engine
             Name = name;
             this.game = game;
 
-            DrawPriorityLayers = new List<List<Sprite>>();
+            DrawPriorityLayers = new List<List<GameObject>>();
             for(int i = 0; i < DRAW_LAYERS; i++)
             {
-                DrawPriorityLayers.Add(new List<Sprite>());
+                DrawPriorityLayers.Add(new List<GameObject>());
             }
 
             inGameConsole = new ConsoleDisplay(game, name + "_console", 0, 0, 100, 100);
@@ -120,7 +121,7 @@ namespace CrossEngine.Engine
             tilemap.AddToView(view);
         }
 
-        public List<List<Sprite>> GetDrawLayers()
+        public List<List<GameObject>> GetDrawLayers()
         {
             if (DrawPriorityLayers == null) throw new NullReferenceException();
             return DrawPriorityLayers;
@@ -144,6 +145,18 @@ namespace CrossEngine.Engine
 
             if (DrawPriorityLayers == null) throw new NullReferenceException();
             DrawPriorityLayers[layer].Add(sprite);
+        }
+
+        protected void AddWorldText(WorldText text, int layer)
+        {
+            if (layer >= DRAW_LAYERS)
+            {
+                Log.Error("Drawing Sprite: " + text.Name + " low prioity since layer greater than DRAW_LAYERS");
+                layer = DRAW_LAYERS - 1;
+            }
+
+            if (DrawPriorityLayers == null) throw new NullReferenceException();
+            DrawPriorityLayers[layer].Add(text);
         }
 
         protected void RemoveSprite(Sprite sprite)

@@ -1,11 +1,5 @@
 ﻿using Cross_Engine.Engine;
 using SFML.Graphics;
-using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CrossEngine.Engine
 {
@@ -48,6 +42,7 @@ namespace CrossEngine.Engine
                 texture = new Texture(textureAsset, new IntRect(0, 0, texWidth, texHeight));
                 sprite = new SFML.Graphics.Sprite(texture);
                 views = new Dictionary<View, XYf>();
+                drawType = DRAW_TYPES.Sprite;
             }
             catch(Exception e)
             {
@@ -65,22 +60,10 @@ namespace CrossEngine.Engine
             views.Add(theView, game.gameWindow.WorldToPixel(X, Y));
         }
 
-        public Dictionary<View, XYf> GetViews()
+        public override void SetRenderPosition(float x, float y)
         {
-            return views;
-        }
+            base.SetRenderPosition(x, y);
 
-        /*
-         * World Position
-         */
-        public void SetWorldPosition(float x, float y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public void SetRenderPosition(float x, float y)
-        {
             if (sprite == null)
             {
                 return;
@@ -95,13 +78,18 @@ namespace CrossEngine.Engine
             return sprite;
         }
 
-        public virtual void Update()
+        public override void Update()
         {
-            for (int i = 0; i < views.Count; i++)
+            base.Update();
+
+            if (views != null)
             {
-                View view = views.ElementAt(i).Key;
-                views[view].X = X;
-                views[view].Y = Y;
+                for (int i = 0; i < views.Count; i++)
+                {
+                    View view = views.ElementAt(i).Key;
+                    views[view].X = X;
+                    views[view].Y = Y;
+                }
             }
         }
 

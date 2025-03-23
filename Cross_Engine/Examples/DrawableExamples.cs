@@ -19,7 +19,8 @@ namespace Cross_Engine.Examples
                 {
                     CrossEngine.Engine.View mainView = new CrossEngine.Engine.View(0, 0, game.gameWindow.Width, game.gameWindow.Height);
                     AddView(mainView);
-                    WorldText text = new WorldText(game, new XYf(100, 100), "Example Text", Common.defaultFont, 20, SFML.Graphics.Color.Blue);
+                    WorldText text = new WorldText(game, new XYf(100, 100), "Example Text", Common.defaultFont, 20, SFML.Graphics.Color.Green);
+                    AddWorldText(text, 0);
                     text.AddToView(mainView);
                 }
             }

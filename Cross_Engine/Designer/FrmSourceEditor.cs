@@ -39,6 +39,7 @@ namespace Cross_Engine.Designer
             codeEditor.Styles[Style.Lua.Word2].ForeColor = Color.BlueViolet;
             codeEditor.Styles[Style.Lua.Word3].ForeColor = Color.DarkSlateBlue;
             codeEditor.Styles[Style.Lua.Word4].ForeColor = Color.DarkSlateBlue;
+            codeEditor.Styles[Style.Lua.Word5].ForeColor = Color.Brown;
             codeEditor.Styles[Style.Lua.String].ForeColor = Color.Red;
             codeEditor.Styles[Style.Lua.Character].ForeColor = Color.Red;
             codeEditor.Styles[Style.Lua.LiteralString].ForeColor = Color.Red;
@@ -58,6 +59,10 @@ namespace Cross_Engine.Designer
             codeEditor.SetKeywords(2, "string.byte string.char string.dump string.find string.format string.gsub string.len string.lower string.rep string.sub string.upper table.concat table.insert table.remove table.sort math.abs math.acos math.asin math.atan math.atan2 math.ceil math.cos math.deg math.exp math.floor math.frexp math.ldexp math.log math.max math.min math.pi math.pow math.rad math.random math.randomseed math.sin math.sqrt math.tan" + " string.gfind string.gmatch string.match string.reverse string.pack string.packsize string.unpack table.foreach table.foreachi table.getn table.setn table.maxn table.pack table.unpack table.move math.cosh math.fmod math.huge math.log10 math.modf math.mod math.sinh math.tanh math.maxinteger math.mininteger math.tointeger math.type math.ult" + " bit32.arshift bit32.band bit32.bnot bit32.bor bit32.btest bit32.bxor bit32.extract bit32.replace bit32.lrotate bit32.lshift bit32.rrotate bit32.rshift" + " utf8.char utf8.charpattern utf8.codes utf8.codepoint utf8.len utf8.offset");
             // Input and Output Facilities and System Facilities
             codeEditor.SetKeywords(3, "coroutine.create coroutine.resume coroutine.status coroutine.wrap coroutine.yield io.close io.flush io.input io.lines io.open io.output io.read io.tmpfile io.type io.write io.stdin io.stdout io.stderr os.clock os.date os.difftime os.execute os.exit os.getenv os.remove os.rename os.setlocale os.time os.tmpname" + " coroutine.isyieldable coroutine.running io.popen module package.loaders package.seeall package.config package.searchers package.searchpath" + " require package.cpath package.loaded package.loadlib package.path package.preload");
+
+            // Input Cross API ---------------
+            codeEditor.SetKeywords(4, "worldtext ");
+            // -------------------------------
 
             // Instruct the lexer to calculate folding
             codeEditor.SetProperty("fold", "1");

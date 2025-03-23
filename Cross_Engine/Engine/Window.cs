@@ -1,5 +1,6 @@
 ﻿using Cross_Engine;
 using Cross_Engine.Designer;
+using Cross_Engine.Engine;
 using SFML.Graphics;
 using SFML.Window;
 using System.Reflection.Metadata;
@@ -234,7 +235,7 @@ namespace CrossEngine.Engine
                 throw new Exception("Main window is null.");
             }
 
-            List<List<Sprite>> layers = scene.GetDrawLayers();
+            List<List<GameObject>> layers = scene.GetDrawLayers();
 
             if (scene.GetTilemap() != null)
             {
@@ -243,7 +244,7 @@ namespace CrossEngine.Engine
 
             for (int layer = 0; layer < layers.Count; layer++)
             {
-                foreach (Sprite sprite in layers[layer])
+                foreach (GameObject gameObject in layers[layer])
                 {
                     if (mainWindow == null)
                     {
@@ -251,9 +252,9 @@ namespace CrossEngine.Engine
                         throw new NullReferenceException();
                     }
 
-                    if (sprite != null && sprite.GetDrawable() != null)
+                    if (gameObject != null && gameObject.drawType == DRAW_TYPES.Sprite)
                     {
-
+                        Sprite sprite = ((Sprite)gameObject);
                         for (int i = 0; i < sprite.GetViews().Count; i++)
                         {
                             KeyValuePair<View, XYf> viewAndPos = sprite.GetViews().ElementAt(i);
@@ -265,6 +266,23 @@ namespace CrossEngine.Engine
                             game.gameWindow.SetView(viewAndPos.Key);
                             sprite.SetRenderPosition(viewAndPos.Value.X, viewAndPos.Value.Y);
                             mainWindow.Draw(sprite.GetDrawable());
+                        }
+                    }
+
+                    if (gameObject != null && gameObject.drawType == DRAW_TYPES.WorldText)
+                    {
+                        WorldText worldText = ((WorldText)gameObject);
+                        for (int i = 0; i < worldText.GetViews().Count; i++)
+                        {
+                            KeyValuePair<View, XYf> viewAndPos = worldText.GetViews().ElementAt(i);
+                            if (game == null || game.gameWindow == null)
+                            {
+                                throw new NullReferenceException();
+                            }
+
+                            game.gameWindow.SetView(viewAndPos.Key);
+                            worldText.SetRenderPosition(viewAndPos.Value.X, viewAndPos.Value.Y);
+                            mainWindow.Draw(worldText.GetDrawable());
                         }
                     }
                 }
