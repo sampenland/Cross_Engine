@@ -61,7 +61,7 @@ namespace Cross_Engine.Designer
             codeEditor.SetKeywords(3, "coroutine.create coroutine.resume coroutine.status coroutine.wrap coroutine.yield io.close io.flush io.input io.lines io.open io.output io.read io.tmpfile io.type io.write io.stdin io.stdout io.stderr os.clock os.date os.difftime os.execute os.exit os.getenv os.remove os.rename os.setlocale os.time os.tmpname" + " coroutine.isyieldable coroutine.running io.popen module package.loaders package.seeall package.config package.searchers package.searchpath" + " require package.cpath package.loaded package.loadlib package.path package.preload");
 
             // Input Cross API ---------------
-            codeEditor.SetKeywords(4, "worldtext ");
+            codeEditor.SetKeywords(4, "log worldtext ");
             // -------------------------------
 
             // Instruct the lexer to calculate folding

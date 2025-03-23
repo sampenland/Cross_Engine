@@ -1,6 +1,7 @@
 ﻿using Cross_Engine;
 using Cross_Engine.Engine;
 using NLua;
+using SFML.Graphics;
 
 namespace CrossEngine.Engine
 {
@@ -17,21 +18,24 @@ namespace CrossEngine.Engine
         private TileMap ?tilemap;
         protected List<View>? views;
         private ConsoleDisplay inGameConsole;
-
         public Scene(Game game, string name)
         {
             Name = name;
             this.game = game;
 
             DrawPriorityLayers = new List<List<GameObject>>();
-            for(int i = 0; i < DRAW_LAYERS; i++)
+            for (int i = 0; i < DRAW_LAYERS; i++)
             {
                 DrawPriorityLayers.Add(new List<GameObject>());
             }
 
             inGameConsole = new ConsoleDisplay(game, name + "_console", 0, 0, 100, 100);
             LinkConsole(inGameConsole);
-            if (game.usingLua) CreateLuaFiles();
+            if (game.usingLua)
+            {
+                CreateLuaFiles();
+                Init();
+            }
         }
 
         public void AddView(View view)
@@ -182,8 +186,36 @@ namespace CrossEngine.Engine
         }
 
         // ============================================================================================
+        // Functions called by lua
+        // ============================================================================================
+        public void LuaCreateView(int x, int y, int width, int height)
+        {
+            CrossEngine.Engine.View mainView = new CrossEngine.Engine.View(x, y, width, height);
+            AddView(mainView);
+        }
+
+        public void LuaCreateWorldText(int x, int y, string text, int r, int g, int b, int a, int v = 0)
+        {
+            if (Common.defaultFont == null || views == null) return;
+
+            SFML.Graphics.Color color = new SFML.Graphics.Color((byte)r, (byte)g, (byte)b, (byte)a);
+            WorldText wText = new WorldText(game, new XYf(100, 100), text, Common.defaultFont, 20, color);
+            AddWorldText(wText, 0);
+            wText.AddToView(views[v]);
+        }
+
+        // ============================================================================================
         // Functions with LUA CALLS
         // ============================================================================================
+        public virtual void Init()
+        {
+            if (game.usingLua)
+            {
+                var initFunc = game.luaState["scene_" + Name + "Init"] as LuaFunction;
+                if (initFunc != null) initFunc.Call();
+            }
+        }
+
         public virtual void Start()
         {
             if (game.usingLua)

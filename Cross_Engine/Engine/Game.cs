@@ -122,6 +122,7 @@ namespace CrossEngine.Engine
 
             luaState["c_game"] = this;
             luaState["c_window"] = gameWindow;
+            luaState["c_scene_manager"] = sceneManager;
 
             if (File.Exists(Environment.CurrentDirectory + "\\Lua\\" + "Lib.lua"))
             {

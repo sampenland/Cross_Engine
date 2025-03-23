@@ -19,7 +19,7 @@ namespace Cross_Engine
         public static string ProjectName = "";
 
         // Lua 
-        public static string[] LuaSceneFiles = ["create.lua", "update.lua"];
+        public static string[] LuaSceneFiles = ["init.lua", "create.lua", "update.lua"];
 
         // ------------------------------
 

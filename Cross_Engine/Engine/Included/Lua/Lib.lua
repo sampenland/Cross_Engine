@@ -10,8 +10,20 @@ function log(text)
 
 end
 
-function worldtext(x, y, text, size, r, g, b)
+function createView(x, y, width, height)
 
-	c_console:Print("Created world text.")
+	local currentScene = c_scene_manager.CurrentScene
+	if currentScene ~= nil then
+		currentScene:LuaCreateView(x, y, width, height)
+	end
+
+end
+
+function worldtext(x, y, text, size, r, g, b, a)
+
+	local currentScene = c_scene_manager.CurrentScene
+	if currentScene ~= nil then
+		currentScene:LuaCreateWorldText(x, y, text, size, r, g, b, a)
+	end
 
 end
