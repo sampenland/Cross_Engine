@@ -142,5 +142,23 @@ namespace Cross_Engine.Designer
         {
             Save();
         }
+
+        private void aPIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            string text = "";
+
+            if (File.Exists(Environment.CurrentDirectory + "\\Lua\\" + "Lib.lua"))
+            {
+                string lib = File.ReadAllText(Environment.CurrentDirectory + "\\Lua\\" + "Lib.lua");
+                text = lib;
+            }
+            else
+            {
+                text = "Could not find library.";
+            }
+
+            FormsCommon.OpenText(text);
+        }
     }
 }

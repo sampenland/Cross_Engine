@@ -8,6 +8,8 @@ namespace CrossEngine.Engine
 {
     class Log
     {
+        static StringBuilder errorLog = new StringBuilder();
+
         public static void PrintDirLocation()
         {
             Print("Location: " + Directory.GetCurrentDirectory());
@@ -33,13 +35,29 @@ namespace CrossEngine.Engine
             Write("" + text);
         }
 
+        public static void InfoPrintErrorLog(string text)
+        {
+            errorLog.Append(DateTime.Now.ToString() + ": " + text + Environment.NewLine);
+        }
         public static void Error(string errText)
         {
+            errorLog.Append(DateTime.Now.ToString() + ": " + errText + Environment.NewLine);
             Console.WriteLine(errText);
+        }
+
+        public static string GetErrorLog()
+        {
+            return errorLog.ToString();
+        }
+
+        public static void ClearErrorLog()
+        {
+            errorLog.Clear();
         }
 
         public static void ThrowException(string text)
         {
+            errorLog.Append(DateTime.Now.ToString() + ": Fatal exception: " + text + Environment.NewLine);
             throw new Exception(text);
         }
     }

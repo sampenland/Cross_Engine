@@ -2,6 +2,7 @@
 using Cross_Engine.Engine;
 using NLua;
 using SFML.Graphics;
+using System.Security.Policy;
 
 namespace CrossEngine.Engine
 {
@@ -194,12 +195,12 @@ namespace CrossEngine.Engine
             AddView(mainView);
         }
 
-        public void LuaCreateWorldText(int x, int y, string text, int r, int g, int b, int a, int v = 0)
+        public void LuaCreateWorldText(int x, int y, string text, int size, int r, int g, int b, int a, int v = 0)
         {
             if (Common.defaultFont == null || views == null) return;
 
             SFML.Graphics.Color color = new SFML.Graphics.Color((byte)r, (byte)g, (byte)b, (byte)a);
-            WorldText wText = new WorldText(game, new XYf(100, 100), text, Common.defaultFont, 20, color);
+            WorldText wText = new WorldText(game, new XYf(x, y), text, Common.defaultFont, size, color);
             AddWorldText(wText, 0);
             wText.AddToView(views[v]);
         }
@@ -220,8 +221,17 @@ namespace CrossEngine.Engine
         {
             if (game.usingLua)
             {
-                var startFunc = game.luaState["scene_" + Name + "Create"] as LuaFunction;
-                if (startFunc != null) startFunc.Call();
+                try
+                {
+                    var startFunc = game.luaState["scene_" + Name + "Create"] as LuaFunction;
+                    if (startFunc != null) startFunc.Call(this);
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show("Exception in LUA: " + e.ToString(), "LUA EXCEPTION", MessageBoxButtons.OK);
+                    inGameConsole.Print("LUA EXCEPTION: " + e.ToString());
+                    Log.Error("LUA EXCEPTION: " + e.ToString());
+                }
             }
         }
 
@@ -233,22 +243,46 @@ namespace CrossEngine.Engine
 
             for (int layer = 0; layer < DRAW_LAYERS; layer++)
             {
-                foreach (Sprite sprite in DrawPriorityLayers[layer])
+                foreach (GameObject obj in DrawPriorityLayers[layer])
                 {
-                    sprite.Update();
-                    if (sprite != null && sprite.GetDrawable() != null)
+                    if (obj is WorldText)
                     {
-
-                        for (int i = 0; i < sprite.GetViews().Count; i++)
+                        WorldText wText = (WorldText)obj;
+                        wText.Update();
+                        if (wText != null && wText.GetDrawable() != null)
                         {
-                            KeyValuePair<View, XYf> viewAndPos = sprite.GetViews().ElementAt(i);
-                            if (game == null || game.gameWindow == null)
-                            {
-                                throw new NullReferenceException();
-                            }
 
-                            game.gameWindow.SetView(viewAndPos.Key);
-                            viewAndPos.Key.Update();
+                            for (int i = 0; i < wText.GetViews().Count; i++)
+                            {
+                                KeyValuePair<View, XYf> viewAndPos = wText.GetViews().ElementAt(i);
+                                if (game == null || game.gameWindow == null)
+                                {
+                                    throw new NullReferenceException();
+                                }
+
+                                game.gameWindow.SetView(viewAndPos.Key);
+                                viewAndPos.Key.Update();
+                            }
+                        }
+                    }
+                    else if (obj is Sprite)
+                    {
+                        Sprite sprite = (Sprite)obj;
+                        sprite.Update();
+                        if (sprite != null && sprite.GetDrawable() != null)
+                        {
+
+                            for (int i = 0; i < sprite.GetViews().Count; i++)
+                            {
+                                KeyValuePair<View, XYf> viewAndPos = sprite.GetViews().ElementAt(i);
+                                if (game == null || game.gameWindow == null)
+                                {
+                                    throw new NullReferenceException();
+                                }
+
+                                game.gameWindow.SetView(viewAndPos.Key);
+                                viewAndPos.Key.Update();
+                            }
                         }
                     }
                 }
@@ -257,7 +291,7 @@ namespace CrossEngine.Engine
             if (game.usingLua)
             {
                 var updateFunc = game.luaState["scene_" + Name + "Update"] as LuaFunction;
-                if (updateFunc != null) updateFunc.Call(game.DeltaTime);
+                if (updateFunc != null) updateFunc.Call(this, game.DeltaTime);
             }
         }
     }

@@ -15,6 +15,7 @@ namespace Cross_Engine.Engine
             textObject.CharacterSize = (uint)fontSize;
             textObject.FillColor = color;
             drawType = DRAW_TYPES.WorldText;
+            setPos(pos);
         }
         public void AddToView(CrossEngine.Engine.View theView)
         {

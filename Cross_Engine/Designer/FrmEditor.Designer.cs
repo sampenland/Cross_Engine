@@ -37,14 +37,18 @@
             btnSceneSource = new Button();
             btnAddScene = new Button();
             btnRemoveScene = new Button();
+            menuStrip1 = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            errorLogToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)ndGameHeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ndGameWidth).BeginInit();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 9);
+            label1.Location = new Point(12, 50);
             label1.Name = "label1";
             label1.Size = new Size(54, 20);
             label1.TabIndex = 0;
@@ -53,14 +57,14 @@
             // lstScenes
             // 
             lstScenes.FormattingEnabled = true;
-            lstScenes.Location = new Point(12, 102);
+            lstScenes.Location = new Point(12, 143);
             lstScenes.Name = "lstScenes";
             lstScenes.Size = new Size(150, 224);
             lstScenes.TabIndex = 1;
             // 
             // btnRun
             // 
-            btnRun.Location = new Point(1216, 12);
+            btnRun.Location = new Point(1216, 41);
             btnRun.Name = "btnRun";
             btnRun.Size = new Size(94, 29);
             btnRun.TabIndex = 2;
@@ -70,7 +74,7 @@
             // 
             // ndGameHeight
             // 
-            ndGameHeight.Location = new Point(1113, 14);
+            ndGameHeight.Location = new Point(1113, 43);
             ndGameHeight.Maximum = new decimal(new int[] { 1080, 0, 0, 0 });
             ndGameHeight.Minimum = new decimal(new int[] { 320, 0, 0, 0 });
             ndGameHeight.Name = "ndGameHeight";
@@ -80,7 +84,7 @@
             // 
             // ndGameWidth
             // 
-            ndGameWidth.Location = new Point(999, 14);
+            ndGameWidth.Location = new Point(999, 43);
             ndGameWidth.Maximum = new decimal(new int[] { 1920, 0, 0, 0 });
             ndGameWidth.Minimum = new decimal(new int[] { 640, 0, 0, 0 });
             ndGameWidth.Name = "ndGameWidth";
@@ -91,7 +95,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(1091, 16);
+            label2.Location = new Point(1091, 45);
             label2.Name = "label2";
             label2.Size = new Size(16, 20);
             label2.TabIndex = 5;
@@ -99,7 +103,7 @@
             // 
             // btnSceneSource
             // 
-            btnSceneSource.Location = new Point(12, 67);
+            btnSceneSource.Location = new Point(12, 108);
             btnSceneSource.Name = "btnSceneSource";
             btnSceneSource.Size = new Size(150, 29);
             btnSceneSource.TabIndex = 6;
@@ -109,7 +113,7 @@
             // 
             // btnAddScene
             // 
-            btnAddScene.Location = new Point(12, 32);
+            btnAddScene.Location = new Point(12, 73);
             btnAddScene.Name = "btnAddScene";
             btnAddScene.Size = new Size(150, 29);
             btnAddScene.TabIndex = 7;
@@ -119,13 +123,37 @@
             // 
             // btnRemoveScene
             // 
-            btnRemoveScene.Location = new Point(12, 332);
+            btnRemoveScene.Location = new Point(12, 373);
             btnRemoveScene.Name = "btnRemoveScene";
             btnRemoveScene.Size = new Size(150, 29);
             btnRemoveScene.TabIndex = 8;
             btnRemoveScene.Text = "Remove Scene";
             btnRemoveScene.UseVisualStyleBackColor = true;
             btnRemoveScene.Click += btnRemoveScene_Click;
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1322, 28);
+            menuStrip1.TabIndex = 9;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { errorLogToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(46, 24);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // errorLogToolStripMenuItem
+            // 
+            errorLogToolStripMenuItem.Name = "errorLogToolStripMenuItem";
+            errorLogToolStripMenuItem.Size = new Size(224, 26);
+            errorLogToolStripMenuItem.Text = "Error Log";
+            errorLogToolStripMenuItem.Click += errorLogToolStripMenuItem_Click;
             // 
             // FrmEditor
             // 
@@ -141,11 +169,15 @@
             Controls.Add(btnRun);
             Controls.Add(lstScenes);
             Controls.Add(label1);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "FrmEditor";
             Text = "Cross Engine";
             FormClosing += FrmEditor_FormClosing;
             ((System.ComponentModel.ISupportInitialize)ndGameHeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)ndGameWidth).EndInit();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -161,5 +193,8 @@
         private Button btnSceneSource;
         private Button btnAddScene;
         private Button btnRemoveScene;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem errorLogToolStripMenuItem;
     }
 }

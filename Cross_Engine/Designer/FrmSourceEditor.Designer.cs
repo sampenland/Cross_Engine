@@ -34,6 +34,7 @@
             tsFile = new ToolStripMenuItem();
             tsSave = new ToolStripMenuItem();
             closeToolStripMenuItem = new ToolStripMenuItem();
+            aPIToolStripMenuItem = new ToolStripMenuItem();
             msMenu.SuspendLayout();
             SuspendLayout();
             // 
@@ -70,7 +71,7 @@
             // 
             // tsFile
             // 
-            tsFile.DropDownItems.AddRange(new ToolStripItem[] { tsSave, closeToolStripMenuItem });
+            tsFile.DropDownItems.AddRange(new ToolStripItem[] { aPIToolStripMenuItem, tsSave, closeToolStripMenuItem });
             tsFile.Name = "tsFile";
             tsFile.Size = new Size(46, 24);
             tsFile.Text = "File";
@@ -88,6 +89,13 @@
             closeToolStripMenuItem.Size = new Size(224, 26);
             closeToolStripMenuItem.Text = "Close";
             closeToolStripMenuItem.Click += closeToolStripMenuItem_Click;
+            // 
+            // aPIToolStripMenuItem
+            // 
+            aPIToolStripMenuItem.Name = "aPIToolStripMenuItem";
+            aPIToolStripMenuItem.Size = new Size(224, 26);
+            aPIToolStripMenuItem.Text = "API";
+            aPIToolStripMenuItem.Click += aPIToolStripMenuItem_Click;
             // 
             // FrmSourceEditor
             // 
@@ -114,5 +122,6 @@
         private ToolStripMenuItem tsFile;
         private ToolStripMenuItem tsSave;
         private ToolStripMenuItem closeToolStripMenuItem;
+        private ToolStripMenuItem aPIToolStripMenuItem;
     }
 }

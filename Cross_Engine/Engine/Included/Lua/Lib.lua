@@ -19,6 +19,7 @@ function createView(x, y, width, height)
 
 end
 
+-- RGB ex: 255, 255, 255, 255 = white full transparent
 function worldtext(x, y, text, size, r, g, b, a)
 
 	local currentScene = c_scene_manager.CurrentScene

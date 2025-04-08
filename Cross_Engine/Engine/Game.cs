@@ -21,6 +21,7 @@ namespace CrossEngine.Engine
         public StringBuilder luaCode = new StringBuilder();
         public string LUA_ROOT = "";
         public bool usingLua;
+        public string Name;
 
         public bool Paused
         {
@@ -58,6 +59,8 @@ namespace CrossEngine.Engine
             {
                 gameWindow = new Window(this, windowWidth, windowHeight, gameName, endKey, handle);
             }
+
+            Name = gameName;
             sceneManager = new SceneManager(this);
             inputHandler = new InputHandler();
             this.usingLua = usingLua;
@@ -92,6 +95,7 @@ namespace CrossEngine.Engine
             Handle = handle;
             gameWindow = new Window(this, windowWidth, windowHeight, gameName, endKey, true);
             gameWindow.RebuildWindow(handle);
+            Name = gameName;
         }
 
         public void RebuildWindow(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey)
@@ -110,6 +114,8 @@ namespace CrossEngine.Engine
             gameWindow.Init(SFML.Graphics.Color.Black);
             FpsTimer = new Clock();
             FpsTimer.Restart();
+
+            Log.InfoPrintErrorLog(Name + " Initalized");
 
             if(usingLua) InitLua();
         }
@@ -163,6 +169,8 @@ namespace CrossEngine.Engine
                 Log.ThrowException(ex.ToString());
                 return;
             }
+
+            Log.InfoPrintErrorLog(Name + ": Lua Initialized");
         }
 
         public void Start(Scene startScene)
@@ -182,6 +190,8 @@ namespace CrossEngine.Engine
 
             updateThread = new Thread(new ThreadStart(Update));
             updateThread.Start();
+
+            Log.InfoPrintErrorLog(Name + ": Started. Now Running.");
         }
 
         public void AddScene(Scene scene)

@@ -216,14 +216,19 @@ namespace Cross_Engine.Designer
             }
             else
             {
-                string ?sceneName = lstScenes.Items[lstScenes.SelectedIndex].ToString();
+                string? sceneName = lstScenes.Items[lstScenes.SelectedIndex].ToString();
                 if (sceneName != null && sceneName != "" && Program.CrossGame != null)
                 {
-                    if(MessageBox.Show("Are you sure you wish to delete: " + sceneName + "?", "Delete Scene?", MessageBoxButtons.YesNo) == DialogResult.No) return;
+                    if (MessageBox.Show("Are you sure you wish to delete: " + sceneName + "?", "Delete Scene?", MessageBoxButtons.YesNo) == DialogResult.No) return;
                     Program.CrossGame.RemoveScene(Program.CrossGame.GetScene(sceneName));
                     DisplayUIChanges();
                 }
             }
+        }
+
+        private void errorLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormsCommon.OpenText(Log.GetErrorLog());
         }
     }
 
