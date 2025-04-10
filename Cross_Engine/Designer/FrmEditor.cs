@@ -45,7 +45,6 @@ namespace Cross_Engine.Designer
 
             ConsoleDisplay worldMakerConsole = new ConsoleDisplay(Program.WorldMaker, "WorldMakerCon", 0, worldMakerSize.Height - 200, worldMakerSize.Width, 200);
             worldMakerConsole.LinkInputHandler(Program.WorldMaker.GetInputHandler());
-            worldMakerConsole.visible = true;
             worldMakerScene.LinkConsole(worldMakerConsole);
             worldMakerConsole.Print("World Editor Started. Click to enable.");
 
@@ -169,7 +168,6 @@ namespace Cross_Engine.Designer
 
                 ConsoleDisplay crossDisplay = new ConsoleDisplay(Program.CrossGame, "CrossGameCon_" + name, 0, (int)ndGameHeight.Value - 300, (int)ndGameWidth.Value, 300);
                 crossDisplay.LinkInputHandler(Program.CrossGame.GetInputHandler());
-                crossDisplay.visible = true;
                 crossDisplay.Print(name + " started");
                 scene.LinkConsole(crossDisplay);
 

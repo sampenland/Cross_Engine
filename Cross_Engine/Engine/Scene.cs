@@ -1,8 +1,6 @@
 ﻿using Cross_Engine;
 using Cross_Engine.Engine;
 using NLua;
-using SFML.Graphics;
-using System.Security.Policy;
 
 namespace CrossEngine.Engine
 {
@@ -195,14 +193,16 @@ namespace CrossEngine.Engine
             AddView(mainView);
         }
 
-        public void LuaCreateWorldText(int x, int y, string text, int size, int r, int g, int b, int a, int v = 0)
+        public WorldText ?LuaCreateWorldText(int x, int y, string text, int size, int r, int g, int b, int a, int v = 0)
         {
-            if (Common.defaultFont == null || views == null) return;
+            if (Common.defaultFont == null || views == null) return null;
 
             SFML.Graphics.Color color = new SFML.Graphics.Color((byte)r, (byte)g, (byte)b, (byte)a);
             WorldText wText = new WorldText(game, new XYf(x, y), text, Common.defaultFont, size, color);
             AddWorldText(wText, 0);
             wText.AddToView(views[v]);
+
+            return wText;
         }
 
         // ============================================================================================
@@ -290,8 +290,17 @@ namespace CrossEngine.Engine
 
             if (game.usingLua)
             {
-                var updateFunc = game.luaState["scene_" + Name + "Update"] as LuaFunction;
-                if (updateFunc != null) updateFunc.Call(this, game.DeltaTime);
+                try
+                {
+                    var updateFunc = game.luaState["scene_" + Name + "Update"] as LuaFunction;
+                    if (updateFunc != null) updateFunc.Call(this, game.DeltaTime);
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show("Exception in LUA: " + e.ToString(), "LUA EXCEPTION", MessageBoxButtons.OK);
+                    if (inGameConsole != null) inGameConsole.Print("LUA EXCEPTION: " + e.ToString());
+                    Log.Error("LUA EXCEPTION: " + e.ToString());
+                }
             }
         }
     }

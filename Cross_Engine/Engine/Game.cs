@@ -166,7 +166,8 @@ namespace CrossEngine.Engine
             }
             catch(Exception ex)
             {
-                Log.ThrowException(ex.ToString());
+                MessageBox.Show("Exception in LUA INIT: " + ex.ToString(), "LUA EXCEPTION", MessageBoxButtons.OK);
+                Log.Error("LUA INIT EXCEPTION: " + ex.ToString());
                 return;
             }
 

@@ -33,7 +33,7 @@ namespace Cross_Engine.Engine
         public override void Update()
         {
             base.Update();
-            setPos(pos);
+            textObject.Position = new SFML.System.Vector2f(pos.X, pos.Y); // Update pos
         }
 
         public XYf getPos()
@@ -41,9 +41,22 @@ namespace Cross_Engine.Engine
             return new XYf(textObject.Position.X, textObject.Position.Y);
         }
 
+        public float getX() { return pos.X; }
+        public float getY() { return pos.Y; }
+
         public void setPos(XYf pos)
         {
-            textObject.Position = new SFML.System.Vector2f(pos.X, pos.Y);
+            this.pos = pos;
+        }
+
+        public void setPos(float x, float y)
+        {
+            this.pos = new XYf(x, y);
+        }
+
+        public void setText(string text)
+        {
+            textObject.DisplayedString = text;
         }
     }
 }

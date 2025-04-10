@@ -39,7 +39,6 @@ namespace Cross_Engine.Designer
             codeEditor.Styles[Style.Lua.Word2].ForeColor = Color.BlueViolet;
             codeEditor.Styles[Style.Lua.Word3].ForeColor = Color.DarkSlateBlue;
             codeEditor.Styles[Style.Lua.Word4].ForeColor = Color.DarkSlateBlue;
-            codeEditor.Styles[Style.Lua.Word5].ForeColor = Color.Brown;
             codeEditor.Styles[Style.Lua.String].ForeColor = Color.Red;
             codeEditor.Styles[Style.Lua.Character].ForeColor = Color.Red;
             codeEditor.Styles[Style.Lua.LiteralString].ForeColor = Color.Red;
@@ -61,6 +60,7 @@ namespace Cross_Engine.Designer
             codeEditor.SetKeywords(3, "coroutine.create coroutine.resume coroutine.status coroutine.wrap coroutine.yield io.close io.flush io.input io.lines io.open io.output io.read io.tmpfile io.type io.write io.stdin io.stdout io.stderr os.clock os.date os.difftime os.execute os.exit os.getenv os.remove os.rename os.setlocale os.time os.tmpname" + " coroutine.isyieldable coroutine.running io.popen module package.loaders package.seeall package.config package.searchers package.searchpath" + " require package.cpath package.loaded package.loadlib package.path package.preload");
 
             // Input Cross API ---------------
+            codeEditor.Styles[Style.Lua.Word5].ForeColor = Color.Brown;
             codeEditor.SetKeywords(4, "log worldtext ");
             // -------------------------------
 
@@ -120,6 +120,7 @@ namespace Cross_Engine.Designer
             if (files.Length > 0)
             {
                 codeEditor.Text = File.ReadAllText(files[0]);
+                lstFunctions.SelectedIndex = 0;
             }
 
         }
@@ -159,6 +160,16 @@ namespace Cross_Engine.Designer
             }
 
             FormsCommon.OpenText(text);
+        }
+
+        private void codeEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == System.Windows.Forms.Keys.S)
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+                tsSave_Click(sender, e);
+            }
         }
     }
 }

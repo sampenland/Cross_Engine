@@ -32,9 +32,9 @@
             codeEditor = new ScintillaNET.Scintilla();
             msMenu = new MenuStrip();
             tsFile = new ToolStripMenuItem();
+            aPIToolStripMenuItem = new ToolStripMenuItem();
             tsSave = new ToolStripMenuItem();
             closeToolStripMenuItem = new ToolStripMenuItem();
-            aPIToolStripMenuItem = new ToolStripMenuItem();
             msMenu.SuspendLayout();
             SuspendLayout();
             // 
@@ -58,6 +58,7 @@
             codeEditor.ScrollWidth = 57;
             codeEditor.Size = new Size(820, 576);
             codeEditor.TabIndex = 1;
+            codeEditor.KeyDown += codeEditor_KeyDown;
             // 
             // msMenu
             // 
@@ -76,26 +77,26 @@
             tsFile.Size = new Size(46, 24);
             tsFile.Text = "File";
             // 
+            // aPIToolStripMenuItem
+            // 
+            aPIToolStripMenuItem.Name = "aPIToolStripMenuItem";
+            aPIToolStripMenuItem.Size = new Size(128, 26);
+            aPIToolStripMenuItem.Text = "API";
+            aPIToolStripMenuItem.Click += aPIToolStripMenuItem_Click;
+            // 
             // tsSave
             // 
             tsSave.Name = "tsSave";
-            tsSave.Size = new Size(224, 26);
+            tsSave.Size = new Size(128, 26);
             tsSave.Text = "Save";
             tsSave.Click += tsSave_Click;
             // 
             // closeToolStripMenuItem
             // 
             closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            closeToolStripMenuItem.Size = new Size(224, 26);
+            closeToolStripMenuItem.Size = new Size(128, 26);
             closeToolStripMenuItem.Text = "Close";
             closeToolStripMenuItem.Click += closeToolStripMenuItem_Click;
-            // 
-            // aPIToolStripMenuItem
-            // 
-            aPIToolStripMenuItem.Name = "aPIToolStripMenuItem";
-            aPIToolStripMenuItem.Size = new Size(224, 26);
-            aPIToolStripMenuItem.Text = "API";
-            aPIToolStripMenuItem.Click += aPIToolStripMenuItem_Click;
             // 
             // FrmSourceEditor
             // 
